@@ -1,5 +1,6 @@
 'use client'
 import * as React from 'react';
+import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,7 +14,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import MYCheckbox from '@/Components/Checkbox';
+import MYCheckbox from '@/Components/MyCheckbox';
 
 function Copyright(props) {
   return (
@@ -32,13 +33,43 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+  const [input, setInput] = useState({
+    First_name: "",
+    Last_name: "",
+    email: "",
+    password: "",
+    cnfrmpass: "",
+  });
+  const checkUserExist = () => {
+    axios
+      .post("", { email: input.email })
+      .then((response) => {
+        if (response.data === "user already exist") {
+          alert(`User with email ${input.email} already exists.`);
+        }
+      });
+  };
+  const onInputChange = (e) => {
+    const { name, value } = e.target;
+    setInput({ ...input, [name]: value });
+  };
+  const HandleSignIN = (e) => {
+    e.preventDefault();
+    console.log(...input);
+    if (input.password !== input.cnfrmpass) {
+      alert("Password and Confirm Password do not match.");
+    } else {
+      if (
+        input.name &&
+        input.email &&
+        input.password &&
+        input.cnfrmpass
+      ) {
+        checkUserExist();
+      } else {
+        alert("Please fill in all the required fields before proceeding.");
+      }
+    }
   };
 
   return (
@@ -59,10 +90,11 @@ export default function SignUp() {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box component="form" noValidate sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
+                  onChange={onInputChange}
                   autoComplete="given-name"
                   name="firstName"
                   required
@@ -74,6 +106,7 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
+                  onChange={onInputChange}
                   required
                   fullWidth
                   id="lastName"
@@ -84,6 +117,7 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                  onChange={onInputChange}
                   required
                   fullWidth
                   id="email"
@@ -94,6 +128,7 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                  onChange={onInputChange}
                   required
                   fullWidth
                   name="password"
@@ -105,6 +140,7 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                  onChange={onInputChange}
                   required
                   fullWidth
                   name="confirm password"
@@ -114,7 +150,9 @@ export default function SignUp() {
                   autoComplete="new-password"
                 />
               </Grid>
+
               <MYCheckbox />
+
               <Grid item xs={12}>
                 <FormControlLabel
                   control={<Checkbox value="allowExtraEmails" color="primary" />}
@@ -123,7 +161,7 @@ export default function SignUp() {
               </Grid>
             </Grid>
             <Button
-              type="submit"
+              onClick={HandleSignIN}
               fullWidth
               variant="contained"
               className="mt-3 mb-2 bg-blue-500 text-white border-none hover:font-bold hover:bg-white hover:text-blue-500 hover:border-black hover:border-2"

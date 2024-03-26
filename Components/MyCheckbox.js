@@ -14,7 +14,7 @@ export default function MYCheckbox() {
             multiple
             sx={{ padding: '18px', marginLeft: '10px' }}
             id="checkboxes-tags-demo"
-            options={top100Films}
+            options={Interest}
             disableCloseOnSelect
             getOptionLabel={(option) => option.title}
             renderOption={(props, option, { selected }) => (
@@ -36,7 +36,7 @@ export default function MYCheckbox() {
     );
 }
 
-const top100Films = [
+const Interest = [
     { title: 'Health' },
     { title: 'Technology' },
     { title: 'Cricket' },

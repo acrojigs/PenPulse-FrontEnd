@@ -1,5 +1,6 @@
 'use client'
 import * as React from 'react';
+import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -26,21 +27,23 @@ function Copyright(props) {
         </Typography>
     );
 }
-
-// TODO remove, this demo shouldn't need to reset the theme.
-
 const defaultTheme = createTheme();
 
 export default function Login() {
-    const handleSubmit = (event) => {
+    const Handlelogin = (event) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+        console.log(input.email);
+        console.log(input.password);
+        //send data through api and validate login
     };
-
+    const onInputChange = (e) => {
+        const { name, value } = e.target;
+        setInput({ ...input, [name]: value });
+    };
+    const [input, setInput] = useState({
+        email: "",
+        password: "",
+    });
     return (
         <ThemeProvider theme={defaultTheme}>
             <Grid container component="main" sx={{ height: '100vh' }}>
@@ -74,8 +77,9 @@ export default function Login() {
                             Login
                             {/* <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}><LockOutlinedIcon /></Avatar> */}
                         </Typography>
-                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+                        <Box component="form" noValidate sx={{ mt: 1 }}>
                             <TextField
+                                onChange={onInputChange}
                                 margin="normal"
                                 required
                                 fullWidth
@@ -86,6 +90,7 @@ export default function Login() {
                                 autoFocus
                             />
                             <TextField
+                                onChange={onInputChange}
                                 margin="normal"
                                 required
                                 fullWidth
@@ -95,12 +100,8 @@ export default function Login() {
                                 id="password"
                                 autoComplete="current-password"
                             />
-                            <FormControlLabel
-                                control={<Checkbox value="remember" color="primary" />}
-                                label="Remember me"
-                            />
                             <Button
-                                type="submit"
+                                onClick={Handlelogin}
                                 fullWidth
                                 variant="contained"
                                 className="mt-3 mb-2 bg-blue-500 text-white border-none hover:bg-white hover:text-blue-500 hover:border-black hover:border-2 hover:font-bold"
